@@ -13,5 +13,12 @@ Data is scraped [here](https://www.mysportsfeeds.com/) and downloaded from [Kagg
 
 ## Data exploration and analysis
 
+### NBA Player Statistics Shiny Dashboard
 
-Data Science Certificate
+This app allows users to create scatterplots of various NBA player statistics and displays the top Performance Index Rating by certain categories. The HTML page can be found [here](https://github.com/coreyzh2/NBA_Shiny_Dashboard) and the data has been provided [here](https://www.sports-reference.com/).
+
+## Miscellaneous
+
+### Data Science Certificate
+
+[]()

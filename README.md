@@ -19,6 +19,6 @@ This app allows users to create scatterplots of various NBA player statistics an
 
 ## Miscellaneous
 
-### Data Science Certificate
+### University of Illinois - Data Science Certificate
 
 []()

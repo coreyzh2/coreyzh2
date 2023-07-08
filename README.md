@@ -15,7 +15,7 @@ Data is scraped [here](https://www.mysportsfeeds.com/) and downloaded from [Kagg
 
 ### NBA Player Statistics Shiny Dashboard
 
-This app allows users to create scatterplots of various NBA player statistics and displays the top Performance Index Rating by certain categories. The HTML page can be found [here](https://github.com/coreyzh2/NBA_Shiny_Dashboard) and the data has been provided [here](https://www.sports-reference.com/).
+This app allows users to create scatterplots of various NBA player statistics and displays the top Performance Index Rating by certain categories. The HTML page can be found [here](https://coreyzh2.shinyapps.io/NBA_Shiny_Dashboard/) and the data has been provided [here](https://www.sports-reference.com/).
 
 ## Miscellaneous
 

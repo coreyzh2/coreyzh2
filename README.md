@@ -9,7 +9,13 @@ Data is scraped [here](https://www.mysportsfeeds.com/) and downloaded from [Kagg
 
 ## Regression problems.
 
-### STAT projects
+### Effectiveness of Toradol on Patient Recovery After Surgery
+
+This repository consists of logistic regression analysis on the effect that Toradol has on patient bed time and pain levels after surgery. The repository to the source code and the analysis report for this project can found from the link [here](https://github.com/coreyzh2/Ketorolac_Report).
+
+### Bubblewrap Production 
+
+This project aims to analyze a data set related to factory operating conditions and bubble wrap production in order to build multiple linear regression models that optmize bubble wrap production rate. The repository to the source code and the analysis report for this project can found from the link [here](https://github.com/coreyzh2/Bubblewrap_project/tree/main).
 
 ## Data exploration and analysis
 

@@ -11,11 +11,11 @@ Data is scraped [here](https://www.mysportsfeeds.com/) and downloaded from [Kagg
 
 ### Effectiveness of Toradol on Patient Recovery After Surgery
 
-This repository consists of logistic regression analysis on the effect that Toradol has on patient bed time and pain levels after surgery. The repository to the source code and the analysis report for this project can found from the link [here](https://github.com/coreyzh2/Ketorolac_Report).
+This project consists of logistic regression analysis on the effect that Toradol has on patient bed time and pain levels after surgery. The source code can be found [here](https://github.com/coreyzh2/coreyzh2/blob/main/Notebooks/ToradolAnalysis.Rmd), and the repository containing all the related files, including the analysis report for this project can found [here](https://github.com/coreyzh2/Ketorolac_Report).
 
 ### Bubblewrap Production 
 
-This project aims to analyze a data set related to factory operating conditions and bubble wrap production in order to build multiple linear regression models that optmize bubble wrap production rate. The repository to the source code and the analysis report for this project can found from the link [here](https://github.com/coreyzh2/Bubblewrap_project/tree/main).
+This project explores and analyzes a data set containing various factory operating statistics for bubble wrap production. The construction of multiple linear regression models is conducted to find the best model in representing bubble wrap production rate. The resulting model optimizes the production rate for the factory. The source code can be found [here](https://github.com/coreyzh2/coreyzh2/blob/main/Notebooks/BubblewrapProductionProject.Rmd), and the repository containing all the related files, including the analysis report for this project can found [here](https://github.com/coreyzh2/Bubblewrap_project/tree/main).
 
 ## Data exploration and analysis
 
@@ -25,6 +25,6 @@ This app allows users to create scatterplots of various NBA player statistics an
 
 ## Miscellaneous
 
-### University of Illinois - [Data Science Certificate](https://www.sports-reference.com/)
+### University of Illinois - [Data Science Certificate](link to pdf)
 
 

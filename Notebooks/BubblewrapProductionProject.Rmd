@@ -1,0 +1,177 @@
+---
+title: "STAT 425 - Final Project"
+author: "Corey Huang"
+date: "12/6/2021"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(lmtest)
+library(MASS)
+library(dplyr)
+library(car)
+```
+
+```{r}
+bubblewrap = read.csv("bubblewrap.csv")
+head(bubblewrap)
+```
+```{r}
+bubblewrap$line_speed <- factor(bubblewrap$line_speed, 
+                  levels = c(36, 37, 38),
+                  labels = c("36", "37", "38"))
+bubblewrap$loading <- factor(bubblewrap$loading, 
+                  levels = c(0, 2, 4),
+                  labels = c("0", "2", "4"))
+str(bubblewrap)
+```
+In order to perform and build a two-way ANOVA model, we must first organize the data in factors with the specified factor levels.
+
+### Data Exploration:
+```{r}
+summary(bubblewrap)
+```
+Producing a statistics summary of the data set to get an idea on the distributions of the variables.
+
+```{r}
+sapply(bubblewrap, class)
+```
+
+Boxplots:
+```{r}
+boxplot(rate ~ line_speed, data=bubblewrap, outline=FALSE)
+```
+```{r}
+boxplot(rate ~ loading, data=bubblewrap, outline=FALSE)
+```
+The boxplot shows that within the `line_speed` factor, the level at 37 m/mm has the least variability and the highest rate. Additionally, the 4% level of the `loading` factor follows the same pattern.
+
+Interaction Plot:
+```{r}
+interaction.plot(bubblewrap$loading, bubblewrap$line_speed, bubblewrap$rate)
+```
+```{r}
+interaction.plot(bubblewrap$line_speed, bubblewrap$loading, bubblewrap$rate)
+```
+Since there are intersections in the 36 and 38 levels of the `loading` factor, it signifies that interaction effects are present. There are also intersections in the 0 and 2 levels of the `line_speed`, which also indicates that interaction effects are present in this factor as well. While interaction effects are present, we look to test if the interaction term is significant to the model.
+
+### Fitted 2-Way ANOVA Model:
+```{r}
+bubblewrap.1 = aov(rate ~ loading*line_speed, data = bubblewrap)
+summary(bubblewrap.1)
+```
+The p-value of `loading:line_speed` is 0.6829, which is less than the significance level of 0.05 and means that the interaction term is not a significant term in the model. Therefore we drop `loading:line_speed` from the two-way ANOVA model.
+
+```{r}
+bubblewrap.2 = aov(rate ~ loading+line_speed, data = bubblewrap)
+summary(bubblewrap.2)
+```
+The results of the F-test show that dropping the interaction term `loading:line_speed` increases the significance of the other two factors. Therefore, we will work with the additive model in this study.
+
+### Diagnostics:
+```{r}
+par(mfrow=c(2,2))
+par(mfrow=c(1,1))
+plot(bubblewrap.2)
+```
+
+Constant Variance:
+```{r}
+bptest(bubblewrap.2)
+```
+```{r}
+leveneTest(rate ~ loading*line_speed, data = bubblewrap)
+```
+From the residual plots, it seems that variance is constant throughout the fitted line. Additionally, the p-values for both tests are greater than 0.05, the BP and Levene's test state that constant variance is present in the model. However, because the data only consists of a small number of observations, it is difficult to confirm that constant variance is indeed present in the model. 
+
+Normality: 
+```{r}
+hist(bubblewrap.2$residuals)
+```
+```{r}
+bubblewrap.res = residuals(object = bubblewrap.2)
+shapiro.test(x = bubblewrap.res)
+```
+From the Shapiro-Wilk normality test and the Q-Q plot, it seems that the residuals do not follow a normal distribution. However, this may not be a significant issue because the sample size is 27, which is not enough for normal distributions to occur naturally. 
+
+### Unusual Observations:
+Outliers:
+```{r}
+outlier=rstudent(bubblewrap.2)
+n = dim(bubblewrap)[1]
+p = 2
+qt(.05/(2*n), n-p-1)
+```
+```{r}
+sort(abs(outlier), decreasing=TRUE)[1:5]
+```
+Using the Bonferroni outlier test procedure, we find that there is 1 observation that is greater in absolute value than -3.559728. Therefore, the 12th observation is an outlier.
+
+Highly Influential Points:
+```{r}
+cooks = cooks.distance(bubblewrap.2) 
+sort(cooks, decreasing = TRUE)[1:10]
+```
+Since none of the observations are greater than 1, we can conclude that there are no highly influential points.
+
+### New ANOVA Model
+```{r}
+bubblewrap2 = bubblewrap[-c(12),]
+bubblewrap.3 = aov(rate ~ loading+line_speed, data = bubblewrap2)
+summary(bubblewrap.3)
+```
+By dropping the 12th row of the data set and keeping the same additive model, the p-values of each factor decreased slightly, signifying that they are slightly more significant without the outlier present in the data. We will call this Model 3.
+
+
+Box-Cox Transformation
+```{r}
+boxcox(bubblewrap.3)
+```
+
+Since the optimal lambda for the Box-Cox transformation is closest to 1, the optimal Box-Cox transformation is the same as our Model 3. 
+
+### Diagnostics:
+```{r}
+par(mfrow=c(2,2))
+plot(bubblewrap.3)
+par(mfrow=c(1,1))
+```
+
+Constant Variance:
+```{r}
+leveneTest(rate ~ loading*line_speed, data = bubblewrap2)
+```
+
+Normality:
+```{r}
+hist(bubblewrap.3$residuals)
+```
+```{r}
+bubblewrap.res2 = residuals(object = bubblewrap.3)
+shapiro.test(x = bubblewrap.res2)
+```
+By using this new dataset, we have increased the p-value of both Levene's test and Shapiro-Wilk's test for constant variance and normality. Since the coefficients are smaller and the model has increased in constant variance and normality, Model 3 will be the optimal and most accurate model in finding the highest production rate. 
+
+### Family Intervals
+```{r}
+CIs.loading = TukeyHSD(bubblewrap.3, which = "loading")
+plot(CIs.loading)
+```
+```{r}
+CIs.ls = TukeyHSD(bubblewrap.3, which = "line_speed")
+plot(CIs.ls)
+```
+```{r}
+CIs.loading
+```
+```{r}
+CIs.ls
+```
+The plot shows that the 4% `loading` factor level has the highest mean production rate out of the 3. Additionally, the highest factor level mean is the 37 m/mm factor level in `line_speed`. This is confirmed in the p-values of the Tukey intervals.
+
+The results of the Tukey intervals from the optimal model for this is design states that the best combination of `loading` and `line_speed` that results in the highest production rate is with 4% loading of additives and a line speed of 37 m/mm.

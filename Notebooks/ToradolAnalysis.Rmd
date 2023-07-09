@@ -1,0 +1,224 @@
+---
+title: "STAT 426 Project 1"
+author: "Corey Huang"
+date: '2022-04-11'
+output:
+  pdf_document: default
+  word_document: default
+---
+
+## Import the Data  
+```{r}
+library(faraway)
+library(VGAM)
+library(tidyverse)
+keto <- read.csv("ketorolac.csv")
+```
+
+## Data Visualization  
+```{r}
+plot(keto$LongStay~TOR, data = keto)
+plot(keto$BadPain~TOR, data=keto)
+hist(keto$LongStay, data=keto)
+hist(keto$BadPain, data=keto)
+```
+
+
+## Outliers  
+```{r}
+outliers <- boxplot(keto$Morphine, plot = FALSE)$out
+outliers
+v = c(which(keto$Morphine == 317.5), which(keto$Morphine == 310.3), which(keto$Morphine == 300.4))
+keto1 <- keto[-v,]
+keto1 = na.omit(keto1)
+```
+
+
+## Model Fitting  
+```{r}
+full_model <- glm(cbind(LongStay, BadPain) ~., family = binomial, data = keto)
+summary(full_model)
+```
+
+## Odds-Ratio for each predictor  
+```{r}
+log_odds <- full_model$coefficients
+exp(full_model$coefficients)
+log_conf <- confint(full_model)
+exp(confint(full_model))
+```
+
+
+# Variable Selection  
+```{r}
+step(full_model, direction = "backward", trace = FALSE)
+step(full_model, direction = "forward", trace = FALSE)
+step(full_model, direction = "both", trace = FALSE)
+```
+
+
+## Confounding Variables
+```{r}
+model.yr <- glm(TOR~DOS.yr, family="binomial", data=keto)
+exp(cbind(coef(model.yr), confint(model.yr, level = 0.95)))
+model.stage <- glm(TOR~Stage, family="binomial", data=keto)
+exp(cbind(coef(model.stage), confint(model.stage, level = 0.95)))
+model.diagnosis <- glm(TOR~Diagnosis, family="binomial", data=keto)
+exp(cbind(coef(model.diagnosis), confint(model.diagnosis, level = 0.95)))
+model.duration <- glm(TOR~duration, family="binomial", data=keto)
+exp(cbind(coef(model.duration), confint(model.duration, level = 0.95)))
+model.age <- glm(TOR~Age, family="binomial", data=keto)
+exp(cbind(coef(model.age), confint(model.age, level = 0.95)))
+model.addpro <- glm(TOR~AddPro, family="binomial", data=keto)
+exp(cbind(coef(model.addpro), confint(model.addpro, level = 0.95)))
+model.HYS <- glm(TOR~HYS, family="binomial", data=keto)
+exp(cbind(coef(model.HYS), confint(model.HYS, level = 0.95)))
+model.OV <- glm(TOR~OV, family="binomial", data=keto)
+exp(cbind(coef(model.OV), confint(model.OV, level = 0.95)))
+model.LNS <- glm(TOR~LNS, family="binomial", data=keto)
+exp(cbind(coef(model.LNS), confint(model.LNS, level = 0.95)))
+model.Morphine <- glm(TOR~Morphine, family="binomial", data=keto)
+exp(cbind(coef(model.Morphine), confint(model.Morphine, level = 0.95)))
+model.Comps <- glm(TOR~Comps, family="binomial", data=keto)
+exp(cbind(coef(model.Comps), confint(model.Comps, level = 0.95)))
+```
+
+
+# Re-Fit the Model
+```{r}
+reduced_model_logit <- glm(cbind(LongStay, BadPain) ~ General.diet + TOR + Comps + Morphine, family = binomial(link = ("logit")), data = keto1)
+reduced_model_probit <- glm(cbind(LongStay, BadPain) ~ General.diet + TOR + Comps + Morphine, family = binomial(link = ("probit")), data = keto1)
+reduced_model_cloglog <- glm(cbind(LongStay, BadPain) ~ General.diet + TOR + Comps + Morphine, family = binomial(link = ("cloglog")), data = keto1)
+```
+
+# Diagnostics  
+## Cook's Distance  
+```{r}
+cooks_red <- cooks.distance(reduced_model_cloglog)
+cooks_dist <- cooks_red > (4 / length(cooks_red))
+cooks_red[cooks_dist]
+x=c(31, 56)
+keto2 <- keto1[-x,]
+keto2 <- na.omit(keto2)
+```
+
+## Highly Influential Points
+```{r}
+df_red = dfbeta(reduced_model_cloglog)
+abs(df_red) > 1
+```
+
+# ROC Curves
+## ROC Curve - LongStay on Logit Model
+```{r}
+pihat <- fitted(reduced_model_logit)
+false.neg <- c(0,cumsum(tapply(keto1$LongStay,pihat,sum)))
+true.neg <- c(0,cumsum(table(pihat))) - false.neg
+plot(1-true.neg/max(true.neg), 1-false.neg/max(false.neg), type="l",
+main="ROC Curve", xlab="1 - Specificity", ylab="Sensitivity",
+xlim=c(0,1), ylim=c(0,1), lwd=3)
+abline(a=0, b=1, lty=2, col="blue")
+mean(outer(pihat[keto1$LongStay==1], pihat[keto1$LongStay==0], ">")
++ 0.5 * outer(pihat[keto1$LongStay==1], pihat[keto1$LongStay==0], "=="))
+```
+Area under ROC Curve: 0.8302969
+
+## ROC Curve - BadPain on Logit Model
+```{r}
+pihat <- fitted(reduced_model_logit)
+false.neg <- c(0,cumsum(tapply(keto1$BadPain,pihat,sum)))
+true.neg <- c(0,cumsum(table(pihat))) - false.neg
+plot(1-true.neg/max(true.neg), 1-false.neg/max(false.neg), type="l",
+main="ROC Curve", xlab="1 - Specificity", ylab="Sensitivity",
+xlim=c(0,1), ylim=c(0,1), lwd=3)
+abline(a=0, b=1, lty=2, col="blue")
+mean(outer(pihat[keto1$BadPain==1], pihat[keto1$BadPain==0], ">")
++ 0.5 * outer(pihat[keto1$BadPain==1], pihat[keto1$BadPain==0], "=="))
+```
+Area under ROC Curve: 0.3941468
+
+## ROC Curve - LongStay on Probit Model
+```{r}
+pihat <- fitted(reduced_model_probit)
+false.neg <- c(0,cumsum(tapply(keto1$LongStay,pihat,sum)))
+true.neg <- c(0,cumsum(table(pihat))) - false.neg
+plot(1-true.neg/max(true.neg), 1-false.neg/max(false.neg), type="l",
+main="ROC Curve", xlab="1 - Specificity", ylab="Sensitivity",
+xlim=c(0,1), ylim=c(0,1), lwd=3)
+abline(a=0, b=1, lty=2, col="blue")
+mean(outer(pihat[keto1$LongStay==1], pihat[keto1$LongStay==0], ">")
++ 0.5 * outer(pihat[keto1$LongStay==1], pihat[keto1$LongStay==0], "=="))
+```
+Area under ROC Curve: 0.830072
+
+## ROC Curve - BadPain on Probit Model
+```{r}
+pihat <- fitted(reduced_model_probit)
+false.neg <- c(0,cumsum(tapply(keto1$BadPain,pihat,sum)))
+true.neg <- c(0,cumsum(table(pihat))) - false.neg
+plot(1-true.neg/max(true.neg), 1-false.neg/max(false.neg), type="l",
+main="ROC Curve", xlab="1 - Specificity", ylab="Sensitivity",
+xlim=c(0,1), ylim=c(0,1), lwd=3)
+abline(a=0, b=1, lty=2, col="blue")
+mean(outer(pihat[keto1$BadPain==1], pihat[keto1$BadPain==0], ">")
++ 0.5 * outer(pihat[keto1$BadPain==1], pihat[keto1$BadPain==0], "=="))
+```
+Area under ROC Curve: 0.3953116
+
+## ROC Curve - LongStay on Cloglog Model
+```{r}
+pihat <- fitted(reduced_model_cloglog)
+false.neg <- c(0,cumsum(tapply(keto1$LongStay,pihat,sum)))
+true.neg <- c(0,cumsum(table(pihat))) - false.neg
+plot(1-true.neg/max(true.neg), 1-false.neg/max(false.neg), type="l",
+main="ROC Curve", xlab="1 - Specificity", ylab="Sensitivity",
+xlim=c(0,1), ylim=c(0,1), lwd=3)
+abline(a=0, b=1, lty=2, col="blue")
+mean(outer(pihat[keto1$LongStay==1], pihat[keto1$LongStay==0], ">")
++ 0.5 * outer(pihat[keto1$LongStay==1], pihat[keto1$LongStay==0], "=="))
+```
+Area under ROC Curve: 0.8359199
+
+## ROC Curve - BadPain on Cloglog Model
+```{r}
+pihat <- fitted(reduced_model_cloglog)
+false.neg <- c(0,cumsum(tapply(keto1$BadPain,pihat,sum)))
+true.neg <- c(0,cumsum(table(pihat))) - false.neg
+plot(1-true.neg/max(true.neg), 1-false.neg/max(false.neg), type="l",
+main="ROC Curve", xlab="1 - Specificity", ylab="Sensitivity",
+xlim=c(0,1), ylim=c(0,1), lwd=3)
+abline(a=0, b=1, lty=2, col="blue")
+mean(outer(pihat[keto1$BadPain==1], pihat[keto1$BadPain==0], ">")
++ 0.5 * outer(pihat[keto1$BadPain==1], pihat[keto1$BadPain==0], "=="))
+```
+Area under ROC Curve: 0.3976412
+
+Average area under ROC for each link function:
+Logit: 0.61222185
+Probit: 0.6126918
+Cloglog: 0.61678055
+
+# Fit the Final Model
+```{r}
+reduced_model_cloglog <- glm(cbind(LongStay, BadPain) ~ General.diet + TOR + Comps + Morphine, family = binomial(link = ("cloglog")), data = keto2)
+summary(reduced_model_cloglog)
+```
+
+
+## Odds Ratios of New Reduced Model
+```{r}
+log_odds <- reduced_model_cloglog$coefficients
+exp(log_odds)
+log_conf <- confint(reduced_model_cloglog)
+exp(confint(reduced_model_cloglog))
+```
+Since the odds-ratio for Toradol is 0.6607466, we can say that Toradol decreases LongStay and BadPain by a factor of 0.6607466.
+
+# Overdispersion
+
+```{r}
+deviance(reduced_model_cloglog)/df.residual(reduced_model_cloglog) 
+```
+Since the ratio is not larger than 1, we can say that overdispersion does not occur in the model, however underdispersion may possibly be an issue. 
+
+

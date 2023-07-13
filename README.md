@@ -5,7 +5,7 @@
 ### Predicting NBA Shot Selection Using K-Nearest Neighbors Algorithm.
 
 This is my first self-led project that aims to provide information about player shot selection in the NBA using the KNN Algorithm. In this repo, I've created a detailed [walkthrough](https://github.com/coreyzh2/coreyzh2/blob/main/Notebooks/NBA%20Shooting%20Score%20Analysis%20Project.ipynb) of the steps involved in computing the KNN model for predicting the shot selection of Devin Booker based on his location on the court. 
-Data is scraped [here](https://www.mysportsfeeds.com/) and downloaded from [Kaggle](https://www.kaggle.com/datasets/wh0801/NBA-16-17-regular-season-shot-log.) 
+Data is scraped [here](https://www.mysportsfeeds.com/) and downloaded from [Kaggle](https://www.kaggle.com/datasets/wh0801/NBA-16-17-regular-season-shot-log.).
 
 ## Regression Problems.
 
@@ -21,6 +21,6 @@ This app allows users to create scatterplots of various NBA player statistics an
 
 ## Miscellaneous
 
-### University of Illinois - [Data Science Certificate](https://github.com/coreyzh2/coreyzh2/blob/main/Notebooks/DS%20Certificate%20Sp23%20-%20Corey%20Z%20Huang.pdf)
+### University of Illinois - [Data Science Certificate](https://github.com/coreyzh2/coreyzh2/blob/main/Notebooks/DS%20Certificate%20Sp23%20-%20Corey%20Z%20Huang.pdf).
 
 

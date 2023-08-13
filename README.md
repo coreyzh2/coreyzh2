@@ -7,6 +7,12 @@
 This is my first self-led project that aims to provide information about player shot selection in the NBA using the KNN Algorithm. In this repo, I've created a detailed [walkthrough](https://github.com/coreyzh2/coreyzh2/blob/main/Notebooks/NBA%20Shooting%20Score%20Analysis%20Project.ipynb) of the steps involved in computing the KNN model for predicting the shot selection of Devin Booker based on his location on the court. 
 Data is scraped [here](https://www.mysportsfeeds.com/) and downloaded from [Kaggle](https://www.kaggle.com/datasets/wh0801/NBA-16-17-regular-season-shot-log.).
 
+## Time Series Analysis.
+
+### CO2 Emissions Analysis.
+
+This project provides visualizations and time series analysis for different types of time series plots to explore CO2 emission trends among various countries and sectors. You can view the results of my code for this analysis [here](www.google.com). The data was obtained from [Kaggle](https://www.kaggle.com/datasets/saloni1712/co2-emissions).
+
 ## Regression Problems.
 
 ### Bubblewrap Production 

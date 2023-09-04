@@ -11,7 +11,7 @@ Data is scraped [here](https://www.mysportsfeeds.com/) and downloaded from [Kagg
 
 ### CO2 Emissions Analysis.
 
-This project provides visualizations and time series analysis for different types of time series plots to explore CO2 emission trends among various countries and sectors. You can view the results of my code for this analysis [here](https://github.com/coreyzh2/CO2_emissions/tree/main). The data was obtained from [Kaggle](https://www.kaggle.com/datasets/saloni1712/co2-emissions).
+This project provides visualizations and time series analysis for different types of time series plots to explore CO2 emission trends among various countries and sectors. You can view the results of my code for this analysis [here](https://github.com/coreyzh2/coreyzh2/blob/main/Notebooks/co2emission_proj.ipynb). The data was obtained from [Kaggle](https://www.kaggle.com/datasets/saloni1712/co2-emissions).
 
 ## Regression Problems.
 

@@ -11,11 +11,15 @@ This project provides visualizations and time series analysis for different type
 
 ### Linear Regression Analysis: Bubblewrap Production 
 
-This project explores and analyzes a data set containing various factory operating statistics for bubble wrap production. The construction of multiple linear regression models is conducted to find the best model in representing bubble wrap production rate. The resulting model optimizes the production rate for the factory. The source code can be found [here](https://github.com/coreyzh2/coreyzh2/blob/main/Notebooks/BubblewrapProductionProject.Rmd), and the repository containing all the related files, including the analysis report for this project can found [here](https://github.com/coreyzh2/Bubblewrap_project/tree/main).
+This project explores and analyzes a dataset containing various factory operating statistics for bubble wrap production. The construction of multiple linear regression models is conducted to find the best model in representing bubble wrap production rate. The resulting model optimizes the production rate for the factory. The source code can be found [here](https://github.com/coreyzh2/coreyzh2/blob/main/Notebooks/BubblewrapProductionProject.Rmd), and the repository containing all the related files, including the analysis report for this project can found [here](https://github.com/coreyzh2/Bubblewrap_project/tree/main).
 
 ### NBA Player Statistics Shiny Dashboard
 
 This app allows users to create scatterplots of various NBA player statistics and displays the top Performance Index Rating by certain categories. The HTML page can be found [here](https://coreyzh2.shinyapps.io/NBA_Shiny_Dashboard/) and the data has been provided [here](https://www.sports-reference.com/).
+
+### Top Selling Hip-Hop Artists and Their City of Influence Over the Years
+
+I took a trip to Atlanta, where I quickly realized that the city was the center for American hip-hop today. I was curious as to how this hub changed from its origins in the Bronx to the great city of Atlanta. In this mini-project, my goal was to find out how the place of influence for successful hip-hop artists changed over time. Since there was no available dataset on the most influenctial rappers and their city of musical influence, I web scraped data to find the artists with the most successful albums from 1998-2023. Then, I quickly found their place of musical influence using the old reliable ChatGPT, and did analysis on the city of influence over time. 
 
 ## Miscellaneous.
 

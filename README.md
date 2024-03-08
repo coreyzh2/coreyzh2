@@ -1,4 +1,4 @@
-# Data Science Applied Projects For Fun by Corey Huang
+# Data Science Side Projects by Corey Huang
 
 ### Predicting NBA Shot Selection Using K-Nearest Neighbors Algorithm
 
